@@ -54,6 +54,15 @@ export const validateJobInput = withValidationErrors([
     .withMessage('invalid type value'),
 ])
 
+export const validateLoginInput = withValidationErrors([
+  body('email')
+    .notEmpty()
+    .withMessage('email is required')
+    .isEmail()
+    .withMessage('invalid email format'),
+  body('password').notEmpty().withMessage('password is required'),
+])
+
 export const validateIdParam = withValidationErrors([
   param('id').custom(async (value) => {
     const isValidId = mongoose.Types.ObjectId.isValid(value)
