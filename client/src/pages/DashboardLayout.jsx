@@ -19,11 +19,10 @@ export const loader = async () => {
 
 const DashboardLayout = ({ isDarkThemeEnabled }) => {
   // temp
-  const user = useLoaderData()
-
+  const { user } = useLoaderData()
+  const navigate = useNavigate() //same as redirect
   const [showSidebar, setShowSidebar] = useState(false)
   const [isDarkTheme, setIsDarkTheme] = useState(checkDefaultTheme())
-  const navigate = useNavigate()
 
   const logoutUser = async () => {
     navigate('/')
