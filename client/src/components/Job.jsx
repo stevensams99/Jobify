@@ -33,7 +33,9 @@ const Job = ({
           <div className={`status ${jobStatus}`}>{jobStatus}</div>
         </div>
         <footer className='actions'>
-          <Link className='btn edit-btn'>Edit</Link>
+          <Link className='btn edit-btn' to={`../edit-job/${_id}`}>
+            Edit
+          </Link>
           <Form>
             <button type='submit' className='btn delete-btn'>
               Delete
