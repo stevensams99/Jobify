@@ -45,7 +45,7 @@ app.use('/api/v1/users', authenticateUser, userRouter)
 app.use('/api/v1/auth', authRouter)
 
 app.use('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, './public', 'index.html'))
+  res.sendFile(path.resolve(__dirname, './client/dist', 'index.html'))
 })
 //NOT FOUND
 app.use('*', (req, res) => {
