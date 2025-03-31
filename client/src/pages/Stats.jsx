@@ -3,12 +3,16 @@ import customFetch from '../utils/customFetch'
 import { useLoaderData } from 'react-router-dom'
 
 export const loader = async () => {
-  try {
-    const { data } = await customFetch.get('/jobs/stats')
-    return data
-  } catch (error) {
-    return error
-  }
+  //error will set up through error element in router in app.jsx
+  const { data } = await customFetch.get('/jobs/stats')
+  return data
+
+  // try {
+  //   const { data } = await customFetch.get('/jobs/stats')
+  //   return data
+  // } catch (error) {
+  //   return error
+  // }
 }
 
 const Stats = () => {
