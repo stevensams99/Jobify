@@ -14,18 +14,25 @@ import { toast } from 'react-toastify'
 
 const DashboardContext = createContext()
 
-export const loader = async () => {
-  try {
+const userQuery = {
+  queryKey: ['user'],
+  queryFn: async () => {
     const { data } = await customFetch('/users/current-user')
     return data
+  },
+}
+
+export const loader = async () => {
+  try {
+    return await queryClient.ensureQueryData(userQuery)
   } catch (error) {
     return redirect('/')
   }
 }
 
-const DashboardLayout = ({ isDarkThemeEnabled }) => {
+const DashboardLayout = ({ prefersDarkMode, queryClient }) => {
   // temp
-  const { user } = useLoaderData()
+  const { user } = useQuery(userQuery)?.data
   const navigate = useNavigate() //same as redirect
   const navigation = useNavigation()
   const isPageLoading = navigation.state === 'loading'
@@ -35,6 +42,7 @@ const DashboardLayout = ({ isDarkThemeEnabled }) => {
   const logoutUser = async () => {
     navigate('/')
     await customFetch.get('/auth/logout')
+    queryClient.invalidateQueries()
     toast.success('Logging out...')
   }
   const toggleDarkTheme = () => {
