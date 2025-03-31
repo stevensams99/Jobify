@@ -1,7 +1,7 @@
 import { ChartsContainer, StatsContainer } from '../components'
 import customFetch from '../utils/customFetch'
 import { useQuery } from '@tanstack/react-query'
-import { useLoaderData } from 'react-router-dom'
+
 const statsQuery = {
   queryKey: ['stats'],
   queryFn: async () => {
@@ -12,7 +12,7 @@ const statsQuery = {
 export const loader = (queryClient) => async () => {
   //fetch data using react query
   const data = await queryClient.ensureQueryData(statsQuery)
-  return data
+  return null
   //error will set up through error element in router in app.jsx
 }
 

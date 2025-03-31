@@ -48,6 +48,6 @@ const AllJobs = () => {
   )
 }
 
-export default AllJobs
-
 export const useAllJobsContext = () => useContext(AllJobsContext)
+
+export default AllJobs

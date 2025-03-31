@@ -1,10 +1,4 @@
-import {
-  Outlet,
-  redirect,
-  useLoaderData,
-  useNavigate,
-  useNavigation,
-} from 'react-router-dom'
+import { Outlet, redirect, useNavigate, useNavigation } from 'react-router-dom'
 import Wrapper from '../assets/wrappers/Dashboard'
 import { Navbar, BigSidebar, SmallSidebar, Loading } from '../components'
 import { useState, createContext, useContext } from 'react'
@@ -22,7 +16,7 @@ const userQuery = {
   },
 }
 
-export const loader = async () => {
+export const loader = (queryClient) => async () => {
   try {
     return await queryClient.ensureQueryData(userQuery)
   } catch (error) {
@@ -30,8 +24,7 @@ export const loader = async () => {
   }
 }
 
-const DashboardLayout = ({ prefersDarkMode, queryClient }) => {
-  // temp
+const DashboardLayout = ({ queryClient }) => {
   const { user } = useQuery(userQuery)?.data
   const navigate = useNavigate() //same as redirect
   const navigation = useNavigation()
@@ -39,12 +32,6 @@ const DashboardLayout = ({ prefersDarkMode, queryClient }) => {
   const [showSidebar, setShowSidebar] = useState(false)
   const [isDarkTheme, setIsDarkTheme] = useState(checkDefaultTheme())
 
-  const logoutUser = async () => {
-    navigate('/')
-    await customFetch.get('/auth/logout')
-    queryClient.invalidateQueries()
-    toast.success('Logging out...')
-  }
   const toggleDarkTheme = () => {
     const newDarkTheme = !isDarkTheme
     setIsDarkTheme(newDarkTheme)
@@ -55,6 +42,30 @@ const DashboardLayout = ({ prefersDarkMode, queryClient }) => {
   const toggleSidebar = () => {
     setShowSidebar(!showSidebar)
   }
+
+  const logoutUser = async () => {
+    navigate('/')
+    await customFetch.get('/auth/logout')
+    queryClient.invalidateQueries()
+    toast.success('Logging out...')
+  }
+
+  customFetch.interceptors.response.use(
+    (response) => {
+      return response
+    },
+    (error) => {
+      if (error?.response?.status === 401) {
+        setIsAuthError(true)
+      }
+      return Promise.reject(error)
+    }
+  )
+
+  useEffect(() => {
+    if (!isAuthError) return
+    logoutUser()
+  }, [isAuthError])
   return (
     <DashboardContext.Provider
       value={{
